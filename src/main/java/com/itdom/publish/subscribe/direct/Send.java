@@ -1,4 +1,4 @@
-package com.itdom.publish.subscribe;
+package com.itdom.publish.subscribe.direct;
 
 import com.itdom.utils.ConnectionUtil;
 import com.rabbitmq.client.BuiltinExchangeType;
@@ -16,18 +16,19 @@ import java.util.concurrent.TimeoutException;
  * 如果没有队列绑定交换机，则消息将会丢失，因为交换机没有能力当存储器，消息只能存储在队列当中。
  */
 public class Send {
-    private static final String EXCHANGE_NAME="MqName.exchange_fanout".toString();
+    private static final String EXCHANGE_NAME="MqName.exchange_routing".toString();
+    private static final String ROUTING_KEY="MqName.routing_world".toString();
     public static void main(String[] args) throws IOException, TimeoutException {
         //创建连接
         Connection connection = ConnectionUtil.getConnection();
         //创建通道
         Channel channel = connection.createChannel();
         //声明交换器
-        channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.FANOUT);
+        channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.DIRECT);
         //发送消息
-        String msg = "hello exchange";
+        String msg = "route message ->" + ROUTING_KEY;
         System.out.println("[mq] send: "+msg);
-        channel.basicPublish(EXCHANGE_NAME,"",null,msg.getBytes());
+        channel.basicPublish(EXCHANGE_NAME,ROUTING_KEY,null,msg.getBytes());
         channel.close();
 
         connection.close();
