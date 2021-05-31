@@ -14,6 +14,7 @@ import java.util.concurrent.TimeoutException;
  *
  * 如果使用fanout模式发送消息，如果发送一条消息，那么多个监听绑定该交换器的队列的消费者将获取到同样的消息
  * 如果没有队列绑定交换机，则消息将会丢失，因为交换机没有能力当存储器，消息只能存储在队列当中。
+ * 　　路由模式，是以路由规则为导向，引导消息存入符合规则的队列中。再由队列的消费者进行消费的。
  */
 public class Send {
     private static final String EXCHANGE_NAME="MqName.exchange_routing".toString();
